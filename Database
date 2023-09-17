@@ -1,0 +1,40 @@
+- User
+    1- parent
+        - first_name
+        - last_name
+        - email
+        - password
+        - confirm password
+        - accept privacy and security
+    2- kid   
+       - parent  ( foreignkey )    
+       - name
+       - age
+       - gender
+       - image
+       - access code 
+
+- Categories :-
+      - category_name
+      - image
+
+- chellanges :-
+    - name
+    - image
+    - categoreis  ( foreignkey )
+    - content
+
+- profile :- 
+    1- name
+    2- email
+    3- password
+    4- code number
+    
+
+================= Logic ==============
+1- SignUp
+2- Login
+3- reset password
+4- profile
+5- settings
+7- retrive all content based on categories
