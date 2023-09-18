@@ -6,7 +6,9 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('Api.urls')) 
+    path('',include('Api.urls')) ,
+    path('custom_users/',include('custom_users.urls')) ,
+    path('Api/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
 ]
 # Media setting #
 if settings.DEBUG is True:

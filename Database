@@ -18,7 +18,7 @@
       - category_name
       - image
 
-- chellanges :-
+- challenges :-
     - name
     - image
     - categoreis  ( foreignkey )
