@@ -11,6 +11,9 @@ from .models import customuser,Verification
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+from .models import Profile,Kid
+from .serializers import ProfileSerializer,kidSerializer
+
 
 @api_view(['POST'])
 def register_user(request):
@@ -32,7 +35,7 @@ def user_login(request):
             try:
                 user = customuser.objects.get(email=email)
             except ObjectDoesNotExist:
-                pass
+                return Response({'message':'invalid email'}, status=status.HTTP_400_BAD_REQUEST)
 
         if not user:
             user = authenticate(email=email, password=password)
@@ -64,7 +67,7 @@ def change_password(request):
             if user.check_password(serializer.data.get('old_password')):
                 user.set_password(serializer.data.get('new_password'))
                 user.save()
-                update_session_auth_hash(request, user)  # To update session after password change
+                update_session_auth_hash(request, user) 
                 return Response({'message': 'Password changed successfully.'}, status=status.HTTP_200_OK)
             return Response({'error': 'Incorrect old password.'}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)     
@@ -74,14 +77,45 @@ def change_password(request):
 class VerifyCode(APIView):
     def post(self, request):
         code = request.data.get('code')
-        user = request.user 
+        email = request.session.get('verification_email',None) 
+        user = customuser.objects.get(email=email)
         try:
             verification = Verification.objects.get(user=user, code=code)
+
             if verification.is_expired():
                 return Response({'message': 'Code has expired'}, status=status.HTTP_400_BAD_REQUEST)
             else:
+                user = verification.user
                 user.is_verified = True
                 user.save()
+                verification.delete()
+                
                 return Response({'message': 'Code verified successfully'}, status=status.HTTP_200_OK)
         except Verification.DoesNotExist:
             return Response({'message': 'Invalid code'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CreateKidView(APIView):
+    def post(self, request, format=None):
+        access_code = request.data.get('access_code')
+        if Kid.objects.filter(access_code=access_code).exists():
+            return Response({'detail': 'Access code already exists'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = kidSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_profile(request):
+    user = request.user
+    try:
+        profile = Profile.objects.get(user=user)
+        serializer = ProfileSerializer(profile)
+        return Response(serializer.data)
+    except Profile.DoesNotExist:
+        return Response({'message': 'Profile not found'}, status=404)

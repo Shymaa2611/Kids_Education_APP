@@ -5,6 +5,9 @@ from django.urls import reverse
 from .models import customuser,Verification
 from django.utils import timezone
 from rest_framework.authtoken.models import Token
+
+
+
 class RegisterUserTest(TestCase):
     def setUp(self):
         self.client = APIClient()

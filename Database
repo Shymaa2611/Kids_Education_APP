@@ -13,23 +13,29 @@
        - gender
        - image
        - access code 
+       - password
 
 - Categories :-
       - category_name
       - image
 
-- challenges :-
-    - name
+- challenges:-
+    - title
     - image
     - categoreis  ( foreignkey )
-    - content
+    - challenge  (manyToMany)
+
+challenge :-
+        challeng1
+        challeng2
+        challenge3
+        res
 
 - profile :- 
-    1- name
-    2- email
-    3- password
-    4- code number
+    1- parent
     
+
+
 
 ================= Logic ==============
 1- SignUp
@@ -37,4 +43,22 @@
 3- reset password
 4- profile
 5- settings
+6- retrive all categories
 7- retrive all content based on categories
+
+
+
+
+
+Tasks :-
+    1- signup =>  completed
+    2- login  =>  completed
+    3- logout  => completed
+    4- profile if parent  => completed
+    5- categories =>  completed
+    6- kid        => completed
+    7- change password => completed
+    8- reset password  => uncompleted
+    9- verify code     => uncompleted
+    10- profile if kid => uncompleted
+    11- challenges and games => uncompleted
