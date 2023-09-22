@@ -12,7 +12,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from .models import Profile,Kid
-from .serializers import ProfileSerializer,kidSerializer
+from .serializers import ProfileSerializer,kidSerializer,generate_verification_code,send_verification_email
 
 
 @api_view(['POST'])
@@ -100,6 +100,19 @@ def change_password(request):
             return Response({'error': 'Incorrect old password.'}, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def send_forgot_password_verification_code(request):
+    if request.method=='POST':
+         email = request.data.get('email')
+         code=generate_verification_code()
+         request.session['verification_email'] = email
+         send_verification_email(email,code)
+         return Response({'message':'successfully '}, status=status.HTTP_200_OK)
+    return Response({'message':'something is wrong'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 class VerifyCode(APIView):
     def post(self, request):

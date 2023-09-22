@@ -95,8 +95,5 @@ class ChangePasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(required=True, write_only=True)
 
 
-""" class ResetPasswordEmailSerializer(serializers.Serializer):
-    email = serializers.EmailField(required=True)
-    verification_code = generate_verification_code()
-    send_verification_email(email, verification_code)
- """
+
+  
