@@ -91,8 +91,9 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class ChangePasswordSerializer(serializers.Serializer):
-    old_password = serializers.CharField(required=True)
-    new_password = serializers.CharField(required=True)
+    old_password = serializers.CharField(required=True, write_only=True)
+    new_password = serializers.CharField(required=True, write_only=True)
+
 
 """ class ResetPasswordEmailSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)

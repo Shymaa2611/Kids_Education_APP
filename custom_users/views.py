@@ -46,6 +46,8 @@ def user_login(request):
 
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
     
+
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def user_logout(request):
@@ -57,22 +59,47 @@ def user_logout(request):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+
+@api_view(['POST'])
+def kid_access_code_login(request):
+    access_code = request.data.get('access_code')
+    
+    try:
+        kid = Kid.objects.get(access_code=access_code)
+        user = customuser.objects.get(kid=kid)
+        print(user.email)
+    except (Kid.DoesNotExist, customuser.DoesNotExist):
+        return Response({'error': 'Invalid access code'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    if not user:
+        user = authenticate(email=user.email, password=user.password)
+
+    if user:
+            token, _ = Token.objects.get_or_create(user=user)
+            return Response({'token': token.key}, status=status.HTTP_200_OK)
+
+    return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+    
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def change_password(request):
-    if request.method == 'POST':
-        serializer = ChangePasswordSerializer(data=request.data)
-        if serializer.is_valid():
-            user = request.user
-            if user.check_password(serializer.data.get('old_password')):
-                user.set_password(serializer.data.get('new_password'))
-                user.save()
-                update_session_auth_hash(request, user) 
-                return Response({'message': 'Password changed successfully.'}, status=status.HTTP_200_OK)
+    serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
+
+    if serializer.is_valid():
+        user = request.user
+        old_password = serializer.validated_data.get('old_password')
+        new_password = serializer.validated_data.get('new_password')
+
+        if old_password==user.password:
+            user.set_password(new_password)
+            user.save()
+            update_session_auth_hash(request, user) 
+            return Response({'message': 'Password changed successfully.'}, status=status.HTTP_200_OK)
+        else:
             return Response({'error': 'Incorrect old password.'}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)     
-
-
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class VerifyCode(APIView):
     def post(self, request):
@@ -93,7 +120,6 @@ class VerifyCode(APIView):
                 return Response({'message': 'Code verified successfully'}, status=status.HTTP_200_OK)
         except Verification.DoesNotExist:
             return Response({'message': 'Invalid code'}, status=status.HTTP_400_BAD_REQUEST)
-
 
 class CreateKidView(APIView):
     def post(self, request, format=None):
