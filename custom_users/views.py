@@ -140,14 +140,17 @@ class CreateKidView(APIView):
         if Kid.objects.filter(access_code=access_code).exists():
             return Response({'detail': 'Access code already exists'}, status=status.HTTP_400_BAD_REQUEST)
         
+        user = customuser.objects.last()
+
         serializer = kidSerializer(data=request.data)
 
         if serializer.is_valid():
-            serializer.save()
+            kid = serializer.save()
+            user.kid = kid 
+            user.save() 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_user_profile(request):

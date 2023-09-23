@@ -8,6 +8,14 @@ from .serializers import categorySerializers
 
 @api_view(['GET'])
 def get_Categories(request):
+    data = Category.objects.all()
+    serializer = categorySerializers(data, many=True)  
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+@api_view(['GET'])
+def search_Category(request):
     data = Category.objects.filter(
       category_title=request.data['category_title']
     )

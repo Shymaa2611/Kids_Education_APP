@@ -49,7 +49,7 @@ challenge :-
 
 
 
-
+=========================================================================
 Tasks :-
     1- signup =>  completed
     2- login  =>  completed
@@ -58,7 +58,8 @@ Tasks :-
     5- categories =>  completed
     6- kid        => completed
     7- change password => completed
-    8- reset password  => uncompleted
+    8- reset password  => completed
     9- verify code     => uncompleted
-    10- profile if kid => uncompleted
+    10- profile if kid => completed
     11- challenges and games => uncompleted
+    12- update profile   => uncomplete
