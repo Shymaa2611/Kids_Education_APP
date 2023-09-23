@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'django_rest_passwordreset',
+    'rest_framework_swagger'
 ]
 CORS_ORIGIN_ALLOW_ALL = True
 REST_FRAMEWORK = {

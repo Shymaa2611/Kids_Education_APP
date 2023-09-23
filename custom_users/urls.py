@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import register_user, user_login, user_logout,VerifyCode,change_password,get_user_profile,CreateKidView,kid_access_code_login,send_forgot_password_verification_code
+from .views import register_user, user_login, user_logout,VerifyCode,change_password,get_user_profile,CreateKidView,kid_access_code_login,send_forgot_password_verification_code,KidUpdate
 
 urlpatterns = [
     path('register/', register_user, name='register'),
@@ -11,4 +11,5 @@ urlpatterns = [
     path('createKid/',CreateKidView.as_view(), name='createkid'),
     path('kid_access/',kid_access_code_login, name='kid_access'),
     path('send_forgot_password_code/',send_forgot_password_verification_code, name='send_forgot_password_code'),
+    path('kid/update/', KidUpdate.as_view(), name='kid-update'),
 ]

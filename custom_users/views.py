@@ -13,7 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from .models import Profile,Kid
 from .serializers import ProfileSerializer,kidSerializer,generate_verification_code,send_verification_email
-
+from rest_framework.generics import RetrieveUpdateAPIView
 
 @api_view(['POST'])
 def register_user(request):
@@ -111,6 +111,13 @@ def send_forgot_password_verification_code(request):
          return Response({'message':'successfully '}, status=status.HTTP_200_OK)
     return Response({'message':'something is wrong'}, status=status.HTTP_400_BAD_REQUEST)
 
+class KidUpdate(RetrieveUpdateAPIView):
+    serializer_class = kidSerializer
+    permission_classes = [IsAuthenticated,]
+    def get_object(self):
+        return self.request.user 
+    def perform_update(self, serializer):
+        serializer.save()
 
 
 
