@@ -23,13 +23,10 @@
     - title
     - image
     - categoreis  ( foreignkey )
-    - challenge  (manyToMany)
-
-challenge :-
-        challeng1
-        challeng2
-        challenge3
-        res
+    - content (manyToMany)
+- content :-
+   content   charfield
+   age
 
 - profile :- 
     1- parent
@@ -47,7 +44,11 @@ challenge :-
 7- retrive all content based on categories
 
 
+=========================================================================
 
+age => 3-5   letters and numbers
+6 => words
+7 - up =>  sentences
 
 =========================================================================
 Tasks :-
