@@ -12,7 +12,7 @@ class Kid(models.Model):
     name=models.CharField(max_length=20)
     image=image=models.ImageField(upload_to='profile/images/',blank=True,null=True)
     age=models.IntegerField(default=5)
-    gender=models.CharField(max_length=6,choices=Gender)
+    gender=models.CharField(max_length=6,choices=Gender,blank=True,null=True)
     password=models.CharField(max_length=20,blank=True,null=True)
     access_code=models.IntegerField(default=0)
     def __str__(self):

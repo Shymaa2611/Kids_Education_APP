@@ -1,0 +1,67 @@
+=================================== Kids Education APP =====================================
+- Authentication :- 
+   1- https://kidseducationapi.pythonanywhere.com/custom_users/register/
+       {
+	   "first_name":"",
+	   "last_name",:"",
+	   "email":"",
+	   "password":"",
+	   "confirm_password":"",
+	   "privacy_security":True
+	   }
+   2- https://kidseducationapi.pythonanywhere.com/custom_users/verify/
+       {
+	   "code":""
+	   }
+   3- https://kidseducationapi.pythonanywhere.com/custom_users/login/
+       {
+	   "email":"",
+	   "password":""
+	   }
+   4- https://kidseducationapi.pythonanywhere.com/custom_users/createKid/ 
+      {
+	  "name":"",
+	  "age":"",
+	  "access_code":""
+	  }
+   5- https://kidseducationapi.pythonanywhere.com/custom_users/kid_login/
+       {
+	   "access_code":""
+	   }
+   6- https://kidseducationapi.pythonanywhere.com/custom_users/send_forgot_password_code/
+      {
+	  "email":""
+	  }
+   7- https://kidseducationapi.pythonanywhere.com/custom_users/verify_rest_password/
+      {
+	   "code":""
+	  }
+   8- https://kidseducationapi.pythonanywhere.com/custom_users/change_password/
+        - should put token in headers
+        {
+		"old_password":"",
+		"new_password":""
+		}
+
+
+- Categories :- 
+     - https://kidseducationapi.pythonanywhere.com/get_categories/
+	 - https://kidseducationapi.pythonanywhere.com/get_challenge/
+	     - Enter category
+		 - Token
+	       
+
+
+
+
+
+- Profile   
+    1- https://kidseducationapi.pythonanywhere.com/custom_users/profile/
+	     - should put token in headers
+	2- https://kidseducationapi.pythonanywhere.com/custom_users/update_kid/
+
+
+
+============== Swagger Link ========================
+
+https://kidseducationapi.pythonanywhere.com/docs/
