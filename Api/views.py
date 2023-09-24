@@ -7,6 +7,7 @@ import numpy as np
 import string
 import random
 
+
 @api_view(['GET'])
 def get_Categories(request):
     data = Category.objects.all()
@@ -120,5 +121,4 @@ def check_answer(request):
 
 
 games=['Letters','Math','Alphabeta','Color & shape']
-
 

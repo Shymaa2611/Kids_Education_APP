@@ -9,6 +9,5 @@ urlpatterns = [
    path('check_results/', views.check_results, name='check_results'),
    path('get_letters/', views.get_3_letters, name='get_letters'),
    path('check_answer/', views.check_answer, name='check_answer'),
-   #path('games/', views.Games, name='games'),
-   #path('check/', views.check, name='check'),
+
 ]
