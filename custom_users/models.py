@@ -18,8 +18,6 @@ class Kid(models.Model):
     def __str__(self):
         return self.name
     
-
-
 class customuser(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
     first_name=models.CharField(max_length=20)
@@ -35,8 +33,6 @@ class customuser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
     
-
-
 class Verification(models.Model):
     user = models.ForeignKey(customuser, on_delete=models.CASCADE)
     code = models.CharField(max_length=6)
@@ -44,7 +40,8 @@ class Verification(models.Model):
 
     def is_expired(self):
         return self.expiration_time < timezone.now()
-
+    def __str__(self):
+        return self.code
 
 class Profile(models.Model):
     user=models.OneToOneField(customuser,on_delete=models.CASCADE)

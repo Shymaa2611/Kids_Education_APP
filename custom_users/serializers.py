@@ -62,8 +62,7 @@ class kidSerializer(serializers.ModelSerializer):
     class Meta:
         model=Kid
         fields=['name','age','gender','password','access_code']
-
-
+        extra_kwargs = {'password': {'write_only': True}}
 
 class ProfileSerializer(serializers.ModelSerializer):
     kid = serializers.SerializerMethodField()
@@ -71,14 +70,14 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ['user', 'email', 'kid']
+        fields = ['email', 'kid']
 
     def get_kid(self, obj):
         user = obj.user
         if user.kid:
             kid_data = {
                 'name': user.kid.name,
-                'password': user.password,
+                'password': user.kid.password if user.kid.password else user.password,
                 'access_code': user.kid.access_code
             }
             return kid_data
@@ -87,8 +86,6 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     def get_email(self, obj): 
         return obj.user.email
-
-
 
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True, write_only=True)

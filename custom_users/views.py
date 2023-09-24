@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -13,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from .models import Profile,Kid
 from .serializers import ProfileSerializer,kidSerializer,generate_verification_code,send_verification_email
-from rest_framework.generics import RetrieveUpdateAPIView
+
 
 @api_view(['POST'])
 def register_user(request):
@@ -80,7 +79,6 @@ def kid_access_code_login(request):
 
     return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
     
-
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def change_password(request):
@@ -106,21 +104,20 @@ def send_forgot_password_verification_code(request):
     if request.method=='POST':
          email = request.data.get('email')
          code=generate_verification_code()
-         request.session['verification_email'] = email
+         request.session['code'] = code
          send_verification_email(email,code)
-         return Response({'message':'successfully '}, status=status.HTTP_200_OK)
+         return Response({'message':'DONE !'}, status=status.HTTP_200_OK)
     return Response({'message':'something is wrong'}, status=status.HTTP_400_BAD_REQUEST)
 
-class KidUpdate(RetrieveUpdateAPIView):
-    serializer_class = kidSerializer
-    permission_classes = [IsAuthenticated,]
-    def get_object(self):
-        return self.request.user 
-    def perform_update(self, serializer):
-        serializer.save()
-
-
-
+class VerifyCode_rest_password(APIView):
+    def post(self, request):
+        code = request.data.get('code')
+        correct_code = request.session.get('code',None)
+        if code==correct_code:
+             return Response({'message': 'Code verified successfully'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'Invalid code'}, status=status.HTTP_400_BAD_REQUEST)
+    
 class VerifyCode(APIView):
     def post(self, request):
         code = request.data.get('code')
@@ -130,6 +127,7 @@ class VerifyCode(APIView):
             verification = Verification.objects.get(user=user, code=code)
 
             if verification.is_expired():
+                user.delete()
                 return Response({'message': 'Code has expired'}, status=status.HTTP_400_BAD_REQUEST)
             else:
                 user = verification.user
@@ -139,6 +137,7 @@ class VerifyCode(APIView):
                 
                 return Response({'message': 'Code verified successfully'}, status=status.HTTP_200_OK)
         except Verification.DoesNotExist:
+            user.delete()
             return Response({'message': 'Invalid code'}, status=status.HTTP_400_BAD_REQUEST)
 
 class CreateKidView(APIView):
@@ -158,6 +157,7 @@ class CreateKidView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_user_profile(request):
@@ -168,3 +168,18 @@ def get_user_profile(request):
         return Response(serializer.data)
     except Profile.DoesNotExist:
         return Response({'message': 'Profile not found'}, status=404)
+
+class UpdateKidAPIView(APIView):
+    def put(self, request):
+        authenticated_user = request.user
+        if authenticated_user.kid:
+            kid = authenticated_user.kid
+            serializer = kidSerializer(kid, data=request.data, partial=True)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response({'message': "Kid data updated successfully"})
+            else:
+                return Response(serializer.errors, status=400)
+        else:
+            return Response({'message': "User has no associated Kid"}, status=400)

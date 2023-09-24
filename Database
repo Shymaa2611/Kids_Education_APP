@@ -35,13 +35,14 @@
 
 
 ================= Logic ==============
-1- SignUp
-2- Login
-3- reset password
-4- profile
-5- settings
-6- retrive all categories
-7- retrive all content based on categories
+- Logic
+ 1- SignUp
+ 2- Login
+ 3- reset password
+ 4- profile
+ 5- settings
+ 6- retrive all categories
+ 7- retrive all content based on categories
 
 
 =========================================================================
@@ -60,7 +61,7 @@ Tasks :-
     6- kid        => completed
     7- change password => completed
     8- reset password  => completed
-    9- verify code     => uncompleted
+    9- verify code     => completed
     10- profile if kid => completed
-    11- challenges and games => uncompleted
-    12- update profile   => uncomplete
+    11- challenges and games => completed
+    12- update profile   => complete
