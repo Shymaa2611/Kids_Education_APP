@@ -200,8 +200,6 @@ class ChangePasswordTest(TestCase):
         self.user.refresh_from_db()
         self.assertTrue(self.user.check_password('password123'))       
 
-
-
 class UpdateKidAPIViewTest(TestCase):
 
     def setUp(self):
@@ -236,5 +234,4 @@ class UpdateKidAPIViewTest(TestCase):
         data = {'name': '', 'age': -5} 
         response = self.client.put(self.update_kid_url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        #self.assertIn('name', response.data)
-        #self.assertIn('age', response.data)
+        
