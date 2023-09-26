@@ -121,8 +121,8 @@ class VerifyCode_rest_password(APIView):
 class VerifyCode(APIView):
     def post(self, request):
         code = request.data.get('code')
-        email = request.session.get('verification_email',None) 
-        user = customuser.objects.get(email=email)
+       # email = request.session.get('verification_email',None) 
+        user = customuser.objects.last()
         try:
             verification = Verification.objects.get(user=user, code=code)
 
@@ -137,7 +137,6 @@ class VerifyCode(APIView):
                 
                 return Response({'message': 'Code verified successfully'}, status=status.HTTP_200_OK)
         except Verification.DoesNotExist:
-            user.delete()
             return Response({'message': 'Invalid code'}, status=status.HTTP_400_BAD_REQUEST)
 
 class CreateKidView(APIView):
