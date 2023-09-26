@@ -6,4 +6,5 @@ django-rest-swagger==2.2.0
 djangorestframework==3.14.0
 Pillow==10.0.0
 numpy
+pyyaml
 
