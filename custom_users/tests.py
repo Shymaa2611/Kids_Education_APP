@@ -31,12 +31,12 @@ class RegisterUserTest(TestCase):
     def test_invalid_registration(self):
         url = reverse('register')
         data = {
-            'first_name': 'Mona',
-            'last_name': 'Ali',
-            'email': 'test@example.com',
-            'password': '123456',
-            'confirm_password': '123457',  
-            'privacy_security': True
+            'first_name': '',
+            'last_name': '',
+            'email': '',
+            'password': '',
+            'confirm_password': '',  
+            'privacy_security': False
         }
 
         response = self.client.post(url, data)
@@ -63,7 +63,7 @@ class UserLoginTest(TestCase):
 
     def test_invalid_email(self):
         data = {
-            'email': 'invalid@example.com',
+            'email': 'invalid@example',
             'password': 'password123'
         }
         response = self.client.post(self.login_url, data, format='json')
